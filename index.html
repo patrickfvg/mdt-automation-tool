@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Sheets Formula Generator</title>
+</head>
+<body>
+
+<form id="formulaGeneratorForm">
+    <label for="dataCenterUrl">Data Center URL:</label>
+    <input type="url" id="dataCenterUrl" name="dataCenterUrl" required>
+    
+    <label for="tabName">Spreadsheet Tab Name:</label>
+    <input type="text" id="tabName" name="tabName" required>
+    
+    <label for="includeFolder">Include Folder:</label>
+    <input type="text" id="includeFolder" name="includeFolder" required>
+    
+    <label for="excludeFolders">Exclude Folders (comma-separated):</label>
+    <input type="text" id="excludeFolders" name="excludeFolders">
+    
+    <input type="submit" value="Generate Formula">
+</form>
+
+<div id="result"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
