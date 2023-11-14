@@ -1,31 +1,56 @@
 // script.js
-document.getElementById('formulaGeneratorForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent the form from submitting in the traditional way
+document.addEventListener('DOMContentLoaded', function() {
+    // Initially hide the copy button
+    document.getElementById('copy-button').style.display = 'none';
 
-    // Get values from form
-    const dataCenterURL = document.getElementById('dataCenterUrl').value;
-    const tabName = document.getElementById('tabName').value;
-    const includeFolder = document.getElementById('includeFolder').value;
-    const excludeFoldersValue = document.getElementById('excludeFolders').value;
-    const excludeFolders = excludeFoldersValue ? excludeFoldersValue.split(',') : [];
+    document.getElementById('formulaGeneratorForm').addEventListener('submit', function(event) {
+        event.preventDefault();
 
-    // Generate the formula
-    const formula = generateFormula(dataCenterURL, tabName, includeFolder, excludeFolders);
+        const dataCenterURL = document.getElementById('dataCenterUrl').value;
+        const tabName = document.querySelector('input[name="tabName"]:checked').value;
+        const includeFolder = document.getElementById('includeFolder').value;
+        const excludeFoldersValue = document.getElementById('excludeFolders').value;
+        const excludeFolders = excludeFoldersValue ? excludeFoldersValue.split(',') : [];
 
-    // Display the formula
-    document.getElementById('result').textContent = formula;
+        const formula = generateFormula(dataCenterURL, tabName, includeFolder, excludeFolders);
+
+        // Display the formula
+        document.getElementById('output-area').textContent = formula;
+
+        // Show the copy button
+        document.getElementById('copy-button').style.display = 'block';
+      
+    });
+
+    document.getElementById('copy-button').addEventListener('click', function() {
+        const formula = document.getElementById('output-area').textContent;
+        if (formula) {
+            navigator.clipboard.writeText(formula).then(() => {
+                alert('Formula copied to clipboard!');
+            }).catch(err => {
+                console.error('Error in copying text: ', err);
+            });
+        }
+    });
 });
 
 function generateFormula(dataCenterURL, tabName, includeFolder, excludeFolders) {
-    const importRange = `IMPORTRANGE("${dataCenterURL}", "${tabName}!A:A")`;
+    let formula = `=SORT(FILTER(IMPORTRANGE("${dataCenterURL}", "${tabName}!A:A"), `;
+    
+    // Include condition
+    if (includeFolder) {
+        formula += `ISNUMBER(SEARCH("${includeFolder}", IMPORTRANGE("${dataCenterURL}", "${tabName}!A:A")))`;
+    }
 
-    let searchPart = `ISNUMBER(SEARCH("${includeFolder}", ${importRange}))`;
-    excludeFolders.forEach((folder) => {
+    // Exclude conditions
+    excludeFolders.forEach((folder, index) => {
         const trimmedFolder = folder.trim();
         if (trimmedFolder) {
-            searchPart += `, NOT(ISNUMBER(SEARCH("${trimmedFolder}", ${importRange})))`;
+            formula += `, NOT(ISNUMBER(SEARCH("${trimmedFolder}", IMPORTRANGE("${dataCenterURL}", "${tabName}!A:A"))))`;
         }
     });
 
-    return `=SORT(FILTER(${importRange}, ${searchPart}), 1, TRUE)`;
+    formula += `), 1, TRUE)`;
+
+    return formula;
 }
