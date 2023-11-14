@@ -1,30 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<title>Google Sheets Formula Generator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Spreadsheet Automation Formula Generator (Folders/Subfolders URLs)</title>
 </head>
 <body>
 
-<form id="formulaGeneratorForm">
-    <label for="dataCenterUrl">Data Center URL:</label>
-    <input type="url" id="dataCenterUrl" name="dataCenterUrl" required>
-    
-    <label for="tabName">Spreadsheet Tab Name:</label>
-    <input type="text" id="tabName" name="tabName" required>
-    
-    <label for="includeFolder">Include Folder:</label>
-    <input type="text" id="includeFolder" name="includeFolder" required>
-    
-    <label for="excludeFolders">Exclude Folders (comma-separated):</label>
-    <input type="text" id="excludeFolders" name="excludeFolders">
-    
-    <input type="submit" value="Generate Formula">
-</form>
+<div id="formula-generator">
+    <h1 id="tool-title">Spreadsheet Automation Formula Generator (Folders/Subfolders URLs)</h1>
 
-<div id="result"></div>
+    <form id="formulaGeneratorForm">
+        <label for="dataCenterUrl">Data Center URL:</label>
+        <input type="url" id="dataCenterUrl" name="dataCenterUrl" required>
+        
+        <label>Spreadsheet Tab Name:</label>
+        <div class="radio-option">
+            <input type="radio" id="tabNameOld" name="tabName" value="Screaming Frog(OLD)" required>
+            <label for="tabNameOld">Screaming Frog(OLD)</label>
+        </div>
+        <div class="radio-option">
+            <input type="radio" id="tabNameNew" name="tabName" value="Screaming Frog(NEW)">
+            <label for="tabNameNew">Screaming Frog(NEW)</label>
+        </div>
+        
+        <label for="includeFolder">Include Folder:</label>
+        <input type="text" id="includeFolder" name="includeFolder" required>
+        
+        <label for="excludeFolders">Exclude Folders (comma-separated):</label>
+        <input type="text" id="excludeFolders" name="excludeFolders">
+        
+        <input type="submit" id="generate-button" value="Generate Formula">
+        <button type="button" id="copy-button">Copy Formula</button>
+    </form>
+
+    <div id="output-area"></div>
+</div>
 
 <script src="script.js"></script>
 
